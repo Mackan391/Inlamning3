@@ -12,6 +12,7 @@ public class FemtonSpel extends JFrame implements ActionListener {
     final JButton[] knappar = new JButton[16];
     int tomRuta = 15;
     final JButton nyttSpelKnapp = new JButton("Nytt spel");
+    final Timer timer = new Timer();
 
     public FemtonSpel() {
         super("Välkommen till Femtonspelet!");
@@ -21,6 +22,7 @@ public class FemtonSpel extends JFrame implements ActionListener {
         JPanel topp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         nyttSpelKnapp.addActionListener(this);
         topp.add(nyttSpelKnapp);
+        topp.add(timer.getLabel()); // lägg till timer
         add(topp, BorderLayout.NORTH);
 
         JPanel mitten = new JPanel(new GridLayout(STORLEK, STORLEK));
@@ -59,6 +61,7 @@ public class FemtonSpel extends JFrame implements ActionListener {
             tomRuta = klickIndex;
             if (löst()){
                 JOptionPane.showMessageDialog(this, "Du vann! Grattis!");
+                timer.stop(); // stoppa timer
             }
         }
     }
@@ -98,6 +101,7 @@ public class FemtonSpel extends JFrame implements ActionListener {
         }
         uppdateraUtseende();
         pack();
+        timer.start();
 }
 private void uppdateraUtseende(){
     for (int i = 0; i < 16; i++) {
