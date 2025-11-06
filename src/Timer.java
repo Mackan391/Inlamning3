@@ -13,7 +13,7 @@ public class Timer {
         stop();
         sekunder = 0;
         label.setText("Tid: 0s");
-        timer = new javax.swing.Timer(3000, e -> {
+        timer = new javax.swing.Timer(1000, e -> {
             sekunder++;
             label.setText("Tid: " + sekunder + "s");
         });

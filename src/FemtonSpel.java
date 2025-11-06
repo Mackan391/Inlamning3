@@ -11,7 +11,10 @@ public class FemtonSpel extends JFrame implements ActionListener {
     final int STORLEK = 4;
     final JButton[] knappar = new JButton[16];
     int tomRuta = 15;
+
     final JButton nyttSpelKnapp = new JButton("Nytt spel");
+    final JCheckBox fuskLäge = new JCheckBox("Fuskläge - sorterat");
+
     final Timer timer = new Timer();
 
     public FemtonSpel() {
@@ -19,11 +22,20 @@ public class FemtonSpel extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel topp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel topp = new JPanel(new BorderLayout(10,0));
+
+        JPanel vänster = new JPanel(new FlowLayout(FlowLayout.LEFT));
         nyttSpelKnapp.addActionListener(this);
-        topp.add(nyttSpelKnapp);
-        topp.add(timer.getLabel()); // lägg till timer
+        vänster.add(nyttSpelKnapp);
+        vänster.add(fuskLäge);
+
+        JPanel höger = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        höger.add(timer.getLabel());
+
+        topp.add(vänster, BorderLayout.WEST);
+        topp.add(höger, BorderLayout.EAST);
         add(topp, BorderLayout.NORTH);
+
 
         JPanel mitten = new JPanel(new GridLayout(STORLEK, STORLEK));
         for (int i = 0; i < 16; i++) {
@@ -55,13 +67,39 @@ public class FemtonSpel extends JFrame implements ActionListener {
         }
     }
 
+    private void nyttSpel() { // skapa brädet med slump eller fusk
+        if (fuskLäge.isSelected()) {
+            tomRuta = FuskLäge.init(knappar);
+        } else {
+            List<Integer> lista = new ArrayList<>(16);
+            for (int i = 0; i < 16; i++) lista.add(i);
+            Collections.shuffle(lista);
+
+            for (int i = 0; i < 16; i++) {
+                int v = lista.get(i);
+                if (v == 0) {
+                    knappar[i].setText("");
+                    tomRuta = i;
+                } else {
+                    knappar[i].setText(String.valueOf(v));
+                }
+
+            }
+        }
+        uppdateraUtseende();
+        timer.start();
+        pack();
+
+    }
+
     private void klick(int klickIndex){
         if (bredvid(klickIndex, tomRuta)) {
             byt(klickIndex, tomRuta);
             tomRuta = klickIndex;
             if (löst()){
-                JOptionPane.showMessageDialog(this, "Du vann! Grattis!");
                 timer.stop(); // stoppa timer
+                JOptionPane.showMessageDialog(this, "Du vann! Grattis!");
+
             }
         }
     }
@@ -77,7 +115,7 @@ public class FemtonSpel extends JFrame implements ActionListener {
 
         return sammaRad || sammaKolumn;
     }
-    private void byt (int a, int b){
+    private void byt (int a, int b){ // byter plats på två knappar
         String textA = knappar[a].getText();
         String textB = knappar[b].getText();
         knappar[a].setText(textB);
@@ -85,24 +123,8 @@ public class FemtonSpel extends JFrame implements ActionListener {
         uppdateraUtseende();
 
 }
-    private void nyttSpel() { // skapa brädet med 16 slumpade siffror
-        List<Integer> lista = new ArrayList<>();
-        for (int i = 0; i < 16; i++) lista.add(i);
-        Collections.shuffle(lista);
 
-        for (int i = 0; i < 16; i++) {
-           int v = lista.get(i);
-           if (v == 0){
-               knappar[i].setText("");
-               tomRuta = i;
-           } else {
-               knappar[i].setText(String.valueOf(v));
-           }
-        }
-        uppdateraUtseende();
-        pack();
-        timer.start();
-}
+
 private void uppdateraUtseende(){
     for (int i = 0; i < 16; i++) {
         boolean tom = knappar[i].getText().isEmpty();
@@ -122,6 +144,9 @@ private boolean löst (){ // kontroll om rutorna ligger i ordning
     return knappar[15].getText().isEmpty();
 
     }
-    void main() {
+
     }
-}
+    void main() {
+    new FemtonSpel();
+
+    }
