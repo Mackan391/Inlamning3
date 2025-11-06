@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public final class FuskLäge {
+public class FuskLäge {
 
     private FuskLäge() {}
 

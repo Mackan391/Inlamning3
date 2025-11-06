@@ -148,5 +148,4 @@ private boolean löst (){ // kontroll om rutorna ligger i ordning
     }
     void main() {
     new FemtonSpel();
-
     }

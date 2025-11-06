@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class Timer {
+public final class Timer {
     private final JLabel label = new JLabel("Tid: 0s");
     private javax.swing.Timer timer;
     private int sekunder = 0;
